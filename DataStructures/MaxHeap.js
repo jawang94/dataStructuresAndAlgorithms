@@ -92,7 +92,7 @@ class MaxHeap {
 
       if (this.heap[index] > this.heap[maxChildIndex]) {
         break;
-      } else if (this.heap[index] < this.heap[maxChildIndex]) {
+      } else if (this.heap[index] <= this.heap[maxChildIndex]) {
         [this.heap[index], this.heap[maxChildIndex]] = [
           this.heap[maxChildIndex],
           this.heap[index]
