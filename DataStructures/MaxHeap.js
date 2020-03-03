@@ -1,4 +1,4 @@
-class maxHeap {
+class MaxHeap {
   constructor() {
     this.heap = [];
   }
@@ -103,7 +103,7 @@ class maxHeap {
   }
 }
 
-const newHeap = new maxHeap();
+const newHeap = new MaxHeap();
 
 newHeap.add(11, 88, 44, 66, 22, 33);
 console.log(newHeap.size());
