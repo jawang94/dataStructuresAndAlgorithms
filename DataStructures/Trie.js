@@ -51,6 +51,7 @@ class Trie {
 
       node.isEnd ? words.push(string) : undefined;
     };
+
     search(this.root, "");
 
     return words.length ? words : "No Words";
@@ -60,12 +61,13 @@ class Trie {
 let newTrie = new Trie();
 newTrie.add("hi");
 newTrie.add("bye");
+newTrie.add("yellow");
 console.log(newTrie.isWord("hi"));
 console.log(newTrie.isWord("bye"));
 console.log(
   newTrie
     .printAll()
-    .map(e => `${e} => `)
+    .map(e => `${e} | `)
     .join(",")
     .replace(/,/g, "")
     .trim()
