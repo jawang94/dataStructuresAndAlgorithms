@@ -198,3 +198,94 @@ class MinHeap {
 // newMinHeap.poll();
 // newMinHeap.add(1);
 // newMinHeap.printHeap();
+
+class HashMap {
+  constructor() {
+    this.hashMap = new Map();
+  }
+
+  hash(value) {
+    let hash = 0;
+
+    for (let i = 0; i < value.length; i++) {
+      let code = value[i].charCodeAt(0);
+      hash = (code << 5) + code - hash;
+    }
+
+    return hash;
+  }
+
+  add(value) {
+    let hashedValue = this.hash(value);
+
+    if (
+      this.hashMap.has(hashedValue) &&
+      this.hashMap.get(hashedValue) !== null
+    ) {
+      let current = this.hashMap.get(hashedValue).head;
+
+      while (current != null && current.next != null) {
+        if ((current.value = value)) return current;
+        else current = current.next;
+      }
+
+      current.next = new ListNode(value);
+    } else {
+      this.hashMap.set(hashedValue, new LinkedList(value));
+    }
+  }
+
+  find(value) {
+    let hashedValue = this.hash(value);
+
+    if (this.hashMap.has(hashedValue)) {
+      let current = this.hashMap.get(hashedValue).head;
+      while (current != null) {
+        if (current.value === value) return current;
+        else current = current.next;
+      }
+    }
+
+    return false;
+  }
+
+  delete(value) {
+    let hashedValue = this.hash(value);
+
+    if (this.hashMap.has(hashedValue)) {
+      let current = this.hashMap.get(hashedValue).head;
+
+      if (current.value === value) {
+        this.hashMap.set(hashedValue, current.next);
+        current.next = null;
+      } else if (current.next === null) {
+        return false;
+      } else {
+        while (current.next.next != null) {
+          if (current.next.value === value) {
+            let deleted = current.next;
+            current.next = current.next.next;
+            return deleted;
+          }
+          current = current.next;
+        }
+      }
+    }
+
+    return false;
+  }
+
+  print() {
+    console.log(this.hashMap);
+  }
+}
+
+let newHashMap = new HashMap();
+newHashMap.add("Jason");
+newHashMap.add("Jaysqwdqwdqwon");
+newHashMap.add("Thomas");
+newHashMap.add("Lucy");
+console.log(newHashMap.find("Lucy"));
+newHashMap.delete("Thomas");
+newHashMap.add("Thomas");
+newHashMap.print();
