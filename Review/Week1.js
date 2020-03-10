@@ -280,12 +280,78 @@ class HashMap {
   }
 }
 
-let newHashMap = new HashMap();
-newHashMap.add("Jason");
-newHashMap.add("Jaysqwdqwdqwon");
-newHashMap.add("Thomas");
-newHashMap.add("Lucy");
-console.log(newHashMap.find("Lucy"));
-newHashMap.delete("Thomas");
-newHashMap.add("Thomas");
-newHashMap.print();
+// let newHashMap = new HashMap();
+// newHashMap.add("Jason");
+// newHashMap.add("Jaysqwdqwdqwon");
+// newHashMap.add("Thomas");
+// newHashMap.add("Lucy");
+// console.log(newHashMap.find("Lucy"));
+// newHashMap.delete("Thomas");
+// newHashMap.add("Thomas");
+// newHashMap.print();
+
+class TrieNode {
+  constructor() {
+    this.children = new Map();
+    this.isEnd = false;
+    this.setEnd = () => (this.isEnd = true);
+  }
+}
+class Trie {
+  constructor() {
+    this.root = new TrieNode();
+  }
+
+  add(word, parent = this.root) {
+    if (!word.length && parent.isEnd) return;
+    else if (!word.length && !parent.isEnd) return parent.setEnd();
+
+    if (!parent.children.has(word[0])) {
+      parent.children.set(word[0], new TrieNode());
+    }
+
+    return this.add(word.substring(1), parent.children.get(word[0]));
+  }
+
+  delete(word) {
+    /** A little bit more complex, due to having to track which word paths end
+     *  at specific nodes. If reached end of word && node still contains other
+     *  children && node isEnd, do we setEnd to false? or not? */
+  }
+
+  isWord(word, parent = this.root) {
+    if (word.length === 0 && parent.isEnd) return true;
+    else if (word.length === 0 && !parent.isEnd) return false;
+    else if (!parent.children.has(word[0])) return false;
+    else return this.add(word.substring(1), parent.children.get(word[0]));
+  }
+
+  print() {
+    let words = [];
+
+    const search = (node, string) => {
+      for (let letter of node.children.keys()) {
+        search(node.children.get(letter), string.concat(letter));
+      }
+      if (node.isEnd) words.push(string);
+    };
+
+    search(this.root, "");
+
+    return words.length ? words : null;
+  }
+}
+
+let newTrie = new Trie();
+newTrie.add("Hi");
+newTrie.add("Bye");
+newTrie.add("Ello");
+console.log(newTrie.root.children);
+console.log(
+  newTrie
+    .print()
+    .map(e => `${e} => `)
+    .join(",")
+    .replace(/,/g, "")
+    .trim()
+);
