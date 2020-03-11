@@ -1,23 +1,23 @@
-let arr = [1, 4, 5, 6, 31, 515, 123, 45246, 5484, 673, 451, 341, 5, 8];
+const mergeSort = input => {
+  if (input.length < 2) return input;
 
-const mergeSort = arr => {
-  if (arr.length < 2) return arr;
-
-  let mid = Math.floor(arr.length / 2);
-  let left = mergeSort(arr.slice(0, mid));
-  let right = mergeSort(arr.slice(mid));
+  const mid = Math.floor(input.length / 2);
+  const left = mergeSort(input.slice(0, mid));
+  const right = mergeSort(input.slice(mid));
 
   return merge(left, right);
 };
 
 const merge = (left, right) => {
-  let result = [];
+  const output = [];
 
   while (left.length > 0 && right.length > 0) {
-    result.push(left[0] < right[0] ? left.shift() : right.shift());
+    output.push(left[0] < right[0] ? left.shift() : right.shift());
   }
 
-  return result.concat(left.length ? left : right);
+  return output.concat(left.length ? left : right);
 };
 
-mergeSort(arr);
+let arr = [12, 43, 77, 15, 56];
+console.log(mergeSort(arr));
+// output = [12, 15, 43, 56, 77];

@@ -30,7 +30,7 @@ class Graph {
     }
 
     this.numberOfEdges++;
-    console.log(this.edges);
+    // console.log(this.edges);
   }
 
   removeVertex(vertex) {}
