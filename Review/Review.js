@@ -342,16 +342,128 @@ class Trie {
   }
 }
 
-let newTrie = new Trie();
-newTrie.add("Hi");
-newTrie.add("Bye");
-newTrie.add("Ello");
-console.log(newTrie.root.children);
-console.log(
-  newTrie
-    .print()
-    .map(e => `${e} => `)
-    .join(",")
-    .replace(/,/g, "")
-    .trim()
-);
+// let newTrie = new Trie();
+// newTrie.add("Hi");
+// newTrie.add("Bye");
+// newTrie.add("Ello");
+// console.log(newTrie.root.children);
+// console.log(
+//   newTrie
+//     .print()
+//     .map(e => `${e} => `)
+//     .join(",")
+//     .replace(/,/g, "")
+//     .trim()
+// );
+
+class TreeNode {
+  constructor(value) {
+    this.value = value ? value : null;
+    this.left = null;
+    this.right = null;
+  }
+}
+
+class Tree {
+  constructor(value) {
+    this.root = value ? new TreeNode(value) : new TreeNode();
+  }
+
+  insert(value) {
+    if (this.root.value === null) {
+      this.root.value = value;
+    }
+
+    const recurse = node => {
+      if (value <= node.value) {
+        if (node.left === null) node.left = new TreeNode(value);
+        else recurse(node.left);
+      } else if (value > node.value) {
+        if (node.right === null) node.right = new TreeNode(value);
+        else recurse(node.right);
+      }
+    };
+
+    recurse(this.root);
+  }
+
+  delete(value) {
+    let deleted = false;
+
+    const recurse = (current, parent) => {};
+
+    recurse(this.root, null);
+
+    return deleted;
+  }
+
+  contains(value) {
+    let output = false;
+
+    const recurse = node => {
+      if (node === null) return;
+
+      if (value === node.value) return (output = true);
+      else if (value < node.value) recurse(node.left);
+      else recurse(node.right);
+    };
+
+    recurse(this.root);
+
+    return output;
+  }
+
+  inOrderTraversal() {
+    if (!this.root) return [];
+    let output = [];
+
+    const recurse = node => {
+      if (node === null) return;
+
+      recurse(node.left);
+      output.push(node.value);
+      recurse(node.right);
+    };
+
+    recurse(this.root);
+
+    return output;
+  }
+
+  getMax() {
+    let max = 0;
+
+    const recurse = node => {
+      if (!node.right) max = node.value;
+      else recurse(node.right);
+    };
+
+    recurse(this.root);
+
+    return max;
+  }
+
+  getMin() {
+    let min = 0;
+
+    const recurse = node => {
+      if (!node.left) min = node.value;
+      else recurse(node.left);
+    };
+
+    recurse(this.root);
+
+    return min;
+  }
+}
+
+const newTree = new Tree(5);
+newTree.insert(1);
+newTree.insert(2);
+newTree.insert(23);
+newTree.insert(6);
+newTree.insert(13);
+console.log(newTree.inOrderTraversal());
+console.log(newTree.getMax());
+console.log(newTree.getMin());
+console.log(newTree.contains(3));
