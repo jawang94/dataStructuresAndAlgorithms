@@ -30,7 +30,7 @@ class TreeNode {
 
     if (current == null) return false; // curr will equal null if value not found in tree
 
-    if ((current.left == null) & (current.right == null)) {
+    if (current.left == null && current.right == null) {
       // has NO children, is a leaf node
       if (current != root) {
         if (parent.left === current) parent.left = null;

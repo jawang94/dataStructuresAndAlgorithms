@@ -388,13 +388,33 @@ class Tree {
   }
 
   delete(value) {
-    let deleted = false;
+    const recurse = (node, value) => {
+      if (node === null) return false;
 
-    const recurse = (current, parent) => {};
+      if (value < node.value) {
+        node.left = recurse(node.left, value);
+        return node;
+      } else if (value > node.value) {
+        node.right = recurse(node.right, value);
+        return node;
+      } else {
+        if (node.left === null && node.right === null) {
+          node = null;
+          return node;
+        } else if (node.left != null && node.right != null) {
+          let successor = node.right;
+          while (successor.left != null) successor = successor.left;
+          node.value = successor.value;
+          node.right = recurse(node.right, successor.value);
+          return node;
+        } else {
+          if (node.left === null) return node.right;
+          else if (node.right === null) return node.left;
+        }
+      }
+    };
 
-    recurse(this.root, null);
-
-    return deleted;
+    return recurse(this.root, value);
   }
 
   contains(value) {
@@ -430,40 +450,88 @@ class Tree {
     return output;
   }
 
-  getMax() {
-    let max = 0;
-
-    const recurse = node => {
-      if (!node.right) max = node.value;
-      else recurse(node.right);
-    };
-
-    recurse(this.root);
-
-    return max;
+  getMax(node) {
+    let current = node || this.root;
+    while (current.right != null) current = current.right;
+    return current;
   }
 
-  getMin() {
-    let min = 0;
-
-    const recurse = node => {
-      if (!node.left) min = node.value;
-      else recurse(node.left);
-    };
-
-    recurse(this.root);
-
-    return min;
+  getMin(node) {
+    let current = node || this.root;
+    while (current.left != null) current = current.left;
+    return current;
   }
 }
 
-const newTree = new Tree(5);
-newTree.insert(1);
-newTree.insert(2);
-newTree.insert(23);
-newTree.insert(6);
-newTree.insert(13);
-console.log(newTree.inOrderTraversal());
-console.log(newTree.getMax());
-console.log(newTree.getMin());
-console.log(newTree.contains(3));
+// const newTree = new Tree(3);
+// newTree.insert(1);
+// newTree.insert(5);
+// newTree.insert(7);
+// newTree.insert(8);
+// newTree.insert(13);
+// newTree.insert(4);
+// newTree.insert(4.5);
+// newTree.insert(6);
+// newTree.delete(7);
+// console.log(newTree.inOrderTraversal());
+// console.log(newTree.root.right.right);
+
+class GraphNode {
+  constructor(value) {
+    this.value = value ? value : null;
+    this.edges = new Map();
+  }
+}
+
+// Each edge will be a [key, value] pair where key = associated vertex and value = weight on edge
+
+class Graph {
+  constructor() {
+    this.vertices = new Map();
+  }
+
+  addVertex(value) {
+    if (!this.vertices.has(value)) {
+      this.vertices.set(value, new GraphNode(value));
+    }
+  }
+
+  addEdge(vertex1, vertex2, weight) {
+    let node1 = this.vertices.get(vertex1);
+    let node2 = this.vertices.get(vertex2);
+    if (!node1 || !node2) return false;
+    else {
+      node1.edges.set(vertex2, { node: node2, weight: weight ? weight : null });
+      node2.edges.set(vertex1, { node: node1, weight: weight ? weight : null });
+    }
+  }
+
+  removeEdge(vertex1, vertex2) {
+    let node1 = this.vertices.get(vertex1);
+    let node2 = this.vertices.get(vertex2);
+    if (!node1 || !node2) return false;
+    else {
+      node1.edges.delete(vertex2);
+      node2.edges.delete(vertex1);
+    }
+  }
+
+  // hasPath(startValue, endValue) {
+  //   let startNode = this.vertices.get(startValue);
+  //   if (!startNode) return false;
+  //   else {
+  //     let nodeQueue = [];
+  //   }
+  // }
+}
+
+let newGraph = new Graph();
+newGraph.addVertex(1);
+newGraph.addVertex(2);
+newGraph.addVertex(3);
+newGraph.addVertex(4);
+newGraph.addVertex(5);
+newGraph.addVertex(6);
+newGraph.addVertex(7);
+newGraph.addEdge(1, 2, 3000);
+console.log(newGraph.vertices);
