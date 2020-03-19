@@ -483,7 +483,7 @@ class GraphNode {
   }
 }
 
-// Each edge will be a [key, value] pair where key = associated vertex and value = weight on edge
+// Each edge will be a [key, value] pair where key = associated vertex and value = {node: GraphNode(), weight: weight of edge}
 
 class Graph {
   constructor() {
@@ -516,13 +516,33 @@ class Graph {
     }
   }
 
-  // hasPath(startValue, endValue) {
-  //   let startNode = this.vertices.get(startValue);
-  //   if (!startNode) return false;
-  //   else {
-  //     let nodeQueue = [];
-  //   }
-  // }
+  hasPath(startValue, endValue) {
+    let startNode = this.vertices.get(startValue);
+
+    if (!startNode) return false;
+    else {
+      let visitedNodes = new Set();
+      let nodeQueue = [];
+      nodeQueue.push(startNode);
+
+      while (nodeQueue.length) {
+        let currentNode = nodeQueue.shift();
+        visitedNodes.add(currentNode);
+
+        if (currentNode.value === endValue) {
+          return true;
+        } else {
+          if (currentNode.edges.size) {
+            for (let [, value] of currentNode.edges) {
+              if (!visitedNodes.has(value.node)) nodeQueue.push(value.node);
+            }
+          }
+        }
+      }
+
+      return false;
+    }
+  }
 }
 
 let newGraph = new Graph();
@@ -533,5 +553,8 @@ newGraph.addVertex(4);
 newGraph.addVertex(5);
 newGraph.addVertex(6);
 newGraph.addVertex(7);
-newGraph.addEdge(1, 2, 3000);
-console.log(newGraph.vertices);
+newGraph.addEdge(1, 2);
+newGraph.addEdge(2, 3);
+newGraph.addEdge(3, 7);
+console.log(newGraph.hasPath(4, 7));
+// console.log(newGraph.vertices);
